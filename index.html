@@ -4,25 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Song Quiz Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0d0d14;
-      --surface: #16161f;
-      --surface2: #1e1e2e;
-      --accent: #f5c542;
-      --accent2: #e07b39;
-      --text: #f0eeff;
-      --muted: #7a7a9a;
+      --bg: #1a0a12;
+      --surface: #241018;
+      --surface2: #2e1420;
+      --surface3: #3a1828;
+      --accent: #ff4fa3;
+      --accent2: #ff85c2;
+      --accent3: #c0185e;
+      --glow: rgba(255,79,163,0.25);
+      --text: #ffe6f3;
+      --muted: #a06080;
       --success: #50c878;
       --danger: #e05555;
-      --radius: 12px;
+      --gold: #ffd700;
+      --radius: 14px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background: var(--bg);
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(255,79,163,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(192,24,94,0.06) 0%, transparent 50%);
       font-family: 'DM Sans', sans-serif;
       color: var(--text);
       min-height: 100vh;
@@ -34,92 +41,114 @@
 
     .app {
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
     }
 
     header {
       text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 32px;
     }
 
     header h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3rem;
-      letter-spacing: 3px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent), var(--accent3));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-shadow: none;
+      filter: drop-shadow(0 0 20px var(--glow));
     }
 
     header p {
       color: var(--muted);
       font-size: 0.85rem;
-      margin-top: 4px;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
     }
 
     .card {
       background: var(--surface);
       border-radius: var(--radius);
-      padding: 20px;
+      padding: 22px;
       margin-bottom: 16px;
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,79,163,0.15);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
     }
 
     .card h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem;
-      letter-spacing: 2px;
-      color: var(--accent);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent2);
       margin-bottom: 14px;
+      letter-spacing: 0.5px;
     }
 
     input {
       width: 100%;
-      padding: 10px 14px;
+      padding: 11px 14px;
       background: var(--surface2);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px;
+      border: 1px solid rgba(255,79,163,0.2);
+      border-radius: 9px;
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
       font-size: 0.95rem;
       margin-bottom: 10px;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     input:focus {
       outline: none;
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255,79,163,0.15);
     }
 
     input::placeholder { color: var(--muted); }
+    input:disabled { opacity: 0.45; cursor: not-allowed; }
 
     .btn {
       display: block;
       width: 100%;
-      padding: 11px;
+      padding: 12px;
       border: none;
-      border-radius: 8px;
+      border-radius: 9px;
       font-family: 'DM Sans', sans-serif;
       font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      transition: opacity 0.15s, transform 0.1s;
+      transition: opacity 0.15s, transform 0.1s, box-shadow 0.2s;
       margin-bottom: 8px;
+      letter-spacing: 0.3px;
     }
 
-    .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
     .btn:active { transform: translateY(0); }
-    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
 
-    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #111; }
-    .btn-ghost { background: var(--surface2); color: var(--text); border: 1px solid rgba(255,255,255,0.1); }
-    .btn-success { background: var(--success); color: #111; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(255,79,163,0.35);
+    }
+
+    .btn-ghost {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid rgba(255,79,163,0.25);
+    }
+
+    .btn-success { background: linear-gradient(135deg, #38b85a, #50c878); color: #fff; }
+    .btn-danger { background: linear-gradient(135deg, var(--danger), #c03030); color: #fff; }
+    .btn-gold { background: linear-gradient(135deg, #c8a800, var(--gold)); color: #111; font-weight: 700; }
+
     .btn-small {
       display: inline-block;
       width: auto;
-      padding: 5px 12px;
-      font-size: 0.8rem;
+      padding: 5px 13px;
+      font-size: 0.78rem;
       margin: 3px 3px 0 0;
       margin-bottom: 0;
     }
@@ -136,55 +165,63 @@
 
     .lobby-code-display {
       background: var(--surface2);
-      border-radius: 8px;
-      padding: 12px;
+      border-radius: 10px;
+      padding: 14px;
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,79,163,0.12);
     }
 
     .lobby-code-display .code {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.6rem;
-      letter-spacing: 8px;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: 10px;
       color: var(--accent);
+      filter: drop-shadow(0 0 10px var(--glow));
     }
 
     .lobby-code-display .label {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
+      margin-bottom: 4px;
     }
 
     .round-badge {
       display: inline-block;
-      background: var(--accent2);
+      background: linear-gradient(135deg, var(--accent3), var(--accent));
       color: #fff;
       border-radius: 20px;
-      padding: 3px 12px;
+      padding: 4px 14px;
       font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
     }
 
     .locked-notice {
-      background: rgba(224,85,85,0.15);
-      border: 1px solid rgba(224,85,85,0.3);
-      border-radius: 8px;
+      background: rgba(224,85,85,0.12);
+      border: 1px solid rgba(224,85,85,0.25);
+      border-radius: 9px;
       padding: 10px;
       text-align: center;
       font-size: 0.85rem;
-      color: #e08888;
+      color: #e09898;
       margin-bottom: 10px;
     }
 
     .player-entry {
       background: var(--surface2);
-      border-radius: 10px;
-      padding: 12px 14px;
+      border-radius: 11px;
+      padding: 13px 15px;
       margin-bottom: 10px;
-      border: 1px solid rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,79,163,0.08);
+      transition: border-color 0.2s;
     }
+
+    .player-entry:hover { border-color: rgba(255,79,163,0.2); }
 
     .player-header {
       display: flex;
@@ -199,27 +236,28 @@
     }
 
     .player-score {
-      background: var(--accent);
-      color: #111;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      color: #fff;
       font-weight: 700;
       font-size: 0.8rem;
       border-radius: 20px;
-      padding: 2px 10px;
+      padding: 3px 12px;
     }
 
     .answer-reveal {
-      background: rgba(255,255,255,0.04);
-      border-radius: 6px;
-      padding: 8px 10px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 7px;
+      padding: 8px 11px;
       font-size: 0.85rem;
       margin-bottom: 8px;
+      border: 1px solid rgba(255,79,163,0.06);
     }
 
     .answer-reveal .label {
       color: var(--muted);
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
     }
 
     .answer-reveal .val {
@@ -231,17 +269,351 @@
 
     .host-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
 
+    .host-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .host-actions .btn { margin-bottom: 0; }
+
+    /* ─── HOST SONG INPUT ─── */
+    .song-input-group {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,79,163,0.18);
+    }
+
+    .song-input-group .sig-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .song-input-group input {
+      margin-bottom: 8px;
+      background: var(--surface3);
+      border-color: rgba(255,79,163,0.15);
+    }
+
+    .song-input-group input:last-of-type { margin-bottom: 0; }
+
+    .song-saved-notice {
+      font-size: 0.78rem;
+      color: var(--success);
+      margin-top: 6px;
+      min-height: 16px;
+      transition: opacity 0.3s;
+    }
+
+    /* ─── REJOIN BANNER ─── */
+    #rejoinBanner {
+      background: linear-gradient(135deg, rgba(255,79,163,0.15), rgba(192,24,94,0.1));
+      border: 1px solid rgba(255,79,163,0.3);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    #rejoinBanner .rj-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--accent2);
+    }
+
+    #rejoinBanner .rj-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: -6px;
+    }
+
+    #rejoinBanner .rj-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    #rejoinBanner .rj-btns .btn {
+      margin-bottom: 0;
+      flex: 1;
+      padding: 9px;
+      font-size: 0.85rem;
+    }
+
     .divider {
       border: none;
-      border-top: 1px solid rgba(255,255,255,0.07);
+      border-top: 1px solid rgba(255,79,163,0.1);
       margin: 18px 0;
     }
 
     .hidden { display: none !important; }
 
-    /* Sections */
-    #sectionLanding {}
-    #sectionGame {}
+    /* ─── QR CODE PANEL ─── */
+    .qr-panel {
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 14px;
+      border: 2px solid rgba(255,79,163,0.3);
+      animation: fadeInScreen 0.3s ease;
+    }
+
+    .qr-panel .qr-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #a06080;
+      margin-bottom: 10px;
+    }
+
+    .qr-panel canvas, .qr-panel img {
+      display: block;
+      margin: 0 auto;
+      border-radius: 6px;
+    }
+
+    .qr-panel .qr-url {
+      font-size: 0.72rem;
+      color: #888;
+      margin-top: 8px;
+      word-break: break-all;
+    }
+
+    .qr-btn-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .qr-btn-row .btn {
+      margin-bottom: 0;
+      flex: 1;
+      font-size: 0.85rem;
+      padding: 9px;
+    }
+
+    /* ─── PDF EXPORT BUTTON on results ─── */
+    .res-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 420px;
+      width: 100%;
+      margin-top: 24px;
+    }
+
+    .res-actions .btn { margin-bottom: 0; }
+    #transitionScreen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, #2a0a1a 0%, #0d0208 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      padding: 32px;
+      text-align: center;
+      animation: fadeInScreen 0.4s ease;
+    }
+
+    @keyframes fadeInScreen {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    #transitionScreen .ts-eyebrow {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    #transitionScreen .ts-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--accent2);
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 18px var(--glow));
+    }
+
+    #transitionScreen .ts-answer-box {
+      background: var(--surface);
+      border: 2px solid rgba(255,79,163,0.3);
+      border-radius: 14px;
+      padding: 20px 28px;
+      margin: 18px 0;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    #transitionScreen .ts-answer-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    #transitionScreen .ts-answer-placeholder {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--accent);
+      font-style: italic;
+      letter-spacing: 0.5px;
+    }
+
+    #transitionScreen .ts-hint {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-bottom: 24px;
+    }
+
+    #transitionScreen .ts-btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 13px 32px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255,79,163,0.4);
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    #transitionScreen .ts-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* ─── RESULTS SCREEN ─── */
+    #resultsScreen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, #1a0810 0%, #0a0206 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      z-index: 200;
+      padding: 32px 20px 60px;
+      overflow-y: auto;
+      animation: fadeInScreen 0.5s ease;
+    }
+
+    #resultsScreen .res-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, var(--gold), #ffb347);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 20px rgba(255,215,0,0.4));
+    }
+
+    #resultsScreen .res-subtitle {
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .podium-entry {
+      width: 100%;
+      max-width: 420px;
+      background: var(--surface);
+      border-radius: 13px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255,79,163,0.15);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      animation: slideIn 0.4s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .podium-entry.rank-1 {
+      border-color: rgba(255,215,0,0.4);
+      background: linear-gradient(135deg, var(--surface), rgba(255,215,0,0.06));
+    }
+
+    .podium-rank {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      min-width: 44px;
+      text-align: center;
+    }
+
+    .rank-1 .podium-rank { color: var(--gold); }
+    .rank-2 .podium-rank { color: #c0c0c0; }
+    .rank-3 .podium-rank { color: #cd7f32; }
+
+    .podium-info { flex: 1; }
+
+    .podium-name {
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 2px;
+    }
+
+    .podium-score {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .podium-score-badge {
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 20px;
+      padding: 5px 16px;
+    }
+
+    .rank-1 .podium-score-badge {
+      background: linear-gradient(135deg, #c8a800, var(--gold));
+      color: #111;
+    }
+
+    .res-close-btn {
+      margin-top: 24px;
+      max-width: 420px;
+      width: 100%;
+    }
+
+    .confetti-dot {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: confettiFall linear forwards;
+      z-index: 201;
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -251,11 +623,21 @@
     <p>Host a round. Guess the track.</p>
   </header>
 
+  <!-- REJOIN BANNER -->
+  <div id="rejoinBanner" class="hidden">
+    <div class="rj-title">👋 Welcome back!</div>
+    <div class="rj-sub" id="rejoinSub">You were in a game. Want to rejoin?</div>
+    <div class="rj-btns">
+      <button class="btn btn-primary" onclick="doRejoin()">Rejoin Game</button>
+      <button class="btn btn-ghost" onclick="dismissRejoin()">Dismiss</button>
+    </div>
+  </div>
+
   <!-- LANDING -->
   <div id="sectionLanding">
     <div class="card">
       <h2>Create Lobby</h2>
-      <button class="btn btn-primary" onclick="createLobby()">+ New Lobby</button>
+      <button class="btn btn-primary" onclick="createLobby()">✨ New Lobby</button>
       <p class="status-msg" id="createStatus"></p>
     </div>
 
@@ -271,18 +653,36 @@
   <!-- IN GAME -->
   <div id="sectionGame" class="hidden">
 
-    <!-- Lobby info -->
     <div class="card" id="lobbyInfoCard">
       <div class="lobby-code-display">
         <div class="label">Lobby Code</div>
         <div class="code" id="displayCode">——</div>
       </div>
+      <!-- QR code toggle (host only) -->
+      <div id="qrBtnRow" class="qr-btn-row hidden">
+        <button class="btn btn-ghost" onclick="toggleQR()" id="btnToggleQR">📱 Show QR Code</button>
+      </div>
+      <div id="qrPanel" class="qr-panel hidden">
+        <div class="qr-label">Scan to join this game</div>
+        <div id="qrContainer"></div>
+        <div class="qr-url" id="qrUrl"></div>
+      </div>
       <div class="round-badge" id="roundBadge">Round 1</div>
 
       <!-- HOST controls -->
       <div id="hostControls" class="hidden">
-        <button class="btn btn-success" onclick="unlockRound()" id="btnUnlock">▶ Start Round</button>
-        <button class="btn btn-ghost" onclick="lockNextRound()" id="btnNext">⏭ Next Round</button>
+        <div class="song-input-group">
+          <div class="sig-label">🎵 This Round's Song</div>
+          <input id="hostCorrectArtist" placeholder="Correct artist…" oninput="saveSongAnswer()">
+          <input id="hostCorrectTitle" placeholder="Correct song title…" oninput="saveSongAnswer()">
+          <div class="song-saved-notice" id="songSavedNotice"></div>
+        </div>
+        <div class="host-actions">
+          <button class="btn btn-success" onclick="unlockRound()" id="btnUnlock">▶ Start Round</button>
+          <button class="btn btn-ghost" onclick="showTransitionScreen()" id="btnNext">⏭ Next Round</button>
+          <button class="btn btn-gold" onclick="endGame()" id="btnEndGame">🏆 End Game & Results</button>
+        </div>
+      </div>
       </div>
 
       <!-- PLAYER answer area -->
@@ -303,9 +703,37 @@
   </div>
 </div>
 
+<!-- TRANSITION SCREEN (host only, full screen overlay) -->
+<div id="transitionScreen" class="hidden">
+  <div class="ts-eyebrow">Round Complete</div>
+  <div class="ts-title" id="tsRoundLabel">Round 1</div>
+  <div class="ts-answer-box">
+    <div class="ts-answer-label">The correct answer was…</div>
+    <div class="ts-answer-placeholder" id="tsCorrectArtist" style="font-size:1rem;color:var(--muted);font-style:normal">🎤 <span style="font-style:italic">Artist</span></div>
+    <div class="ts-answer-placeholder" id="tsCorrectTitle" style="margin-top:6px">🎵 <span style="font-style:italic">Song Title</span></div>
+  </div>
+  <p class="ts-hint">Reveal the answer to your players, then continue.</p>
+  <button class="ts-btn" onclick="proceedToNextRound()">Continue to Round <span id="tsNextRoundNum">2</span> →</button>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div id="resultsScreen" class="hidden">
+  <div class="res-title">🏆 Final Results</div>
+  <div class="res-subtitle">Thanks for playing — here's how everyone did!</div>
+  <div id="podiumList"></div>
+  <div class="res-actions">
+    <button class="btn btn-primary" onclick="exportPDF()">📄 Export Answer Sheet (PDF)</button>
+    <button class="btn btn-ghost" onclick="closeResults()">← Back to Lobby</button>
+  </div>
+</div>
+
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<!-- QR Code -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 /* ── Firebase ── */
 firebase.initializeApp({
@@ -325,22 +753,79 @@ let myPlayerId = null;
 let isHost = false;
 let currentRound = 1;
 let roundLocked = true;
-let submittedThisRound = false;
+let songSaveTimer = null;
 
 /* ── Util ── */
 const $ = id => document.getElementById(id);
-
-function genCode() {
-  return Math.random().toString(36).substring(2, 8).toUpperCase();
-}
-
+function genCode() { return Math.random().toString(36).substring(2, 8).toUpperCase(); }
 function show(id) { $(id).classList.remove('hidden'); }
 function hide(id) { $(id).classList.add('hidden'); }
-
 function setStatus(id, msg, type = '') {
   const el = $(id);
   el.textContent = msg;
   el.className = 'status-msg' + (type ? ' ' + type : '');
+}
+
+/* ── On page load: check rejoin + auto-fill join code from URL ── */
+window.addEventListener('DOMContentLoaded', () => {
+  // Auto-fill code from ?join= param
+  const params = new URLSearchParams(window.location.search);
+  const joinParam = params.get('join');
+  if (joinParam) {
+    $('joinCode').value = joinParam.toUpperCase();
+    $('playerName').focus();
+  }
+
+  // Check for saved session to rejoin
+  const saved = getSavedSession();
+  if (saved) {
+    db.ref('lobbies/' + saved.code).once('value').then(snap => {
+      if (!snap.exists() || snap.val()?.gameOver) { clearSavedSession(); return; }
+      const lobby = snap.val();
+      if (!saved.isHost && !lobby.players?.[saved.playerId]) { clearSavedSession(); return; }
+      $('rejoinSub').textContent = `You were in lobby ${saved.code} as ${saved.isHost ? 'host' : saved.playerName}.`;
+      show('rejoinBanner');
+    }).catch(() => clearSavedSession());
+  }
+});
+
+function getSavedSession() {
+  try {
+    const raw = localStorage.getItem('songQuizSession');
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function saveSession() {
+  try {
+    localStorage.setItem('songQuizSession', JSON.stringify({
+      code: lobbyCode,
+      playerId: myPlayerId,
+      playerName: isHost ? null : $('playerName')?.value?.trim() || '',
+      isHost
+    }));
+  } catch {}
+}
+
+function clearSavedSession() {
+  try { localStorage.removeItem('songQuizSession'); } catch {}
+}
+
+function doRejoin() {
+  const saved = getSavedSession();
+  if (!saved) return;
+  hide('rejoinBanner');
+
+  lobbyCode = saved.code;
+  isHost = saved.isHost;
+  myPlayerId = saved.playerId;
+
+  enterGame(saved.code);
+}
+
+function dismissRejoin() {
+  clearSavedSession();
+  hide('rejoinBanner');
 }
 
 /* ── Create Lobby ── */
@@ -348,17 +833,19 @@ function createLobby() {
   const code = genCode();
   lobbyCode = code;
   isHost = true;
+  myPlayerId = null;
 
   db.ref('lobbies/' + code).set({
     status: 'open',
     round: 1,
-    roundLocked: true
+    roundLocked: true,
+    gameOver: false,
+    songs: {}
   }).then(() => {
+    saveSession();
     enterGame(code);
     setStatus('createStatus', 'Lobby created!', 'ok');
-  }).catch(e => {
-    setStatus('createStatus', 'Error: ' + e.message, 'err');
-  });
+  }).catch(e => setStatus('createStatus', 'Error: ' + e.message, 'err'));
 }
 
 /* ── Join Lobby ── */
@@ -370,9 +857,8 @@ function joinLobby() {
   if (!code || code.length < 4) return setStatus('joinStatus', 'Enter a valid lobby code.', 'err');
 
   db.ref('lobbies/' + code).once('value').then(snap => {
-    if (!snap.exists()) {
-      return setStatus('joinStatus', 'Lobby not found.', 'err');
-    }
+    if (!snap.exists()) return setStatus('joinStatus', 'Lobby not found.', 'err');
+    if (snap.val()?.gameOver) return setStatus('joinStatus', 'That game has already ended.', 'err');
     const pid = db.ref().push().key;
     myPlayerId = pid;
     return db.ref(`lobbies/${code}/players/${pid}`).set({
@@ -382,6 +868,7 @@ function joinLobby() {
     }).then(() => {
       lobbyCode = code;
       isHost = false;
+      saveSession();
       enterGame(code);
       setStatus('joinStatus', 'Joined!', 'ok');
     });
@@ -396,6 +883,8 @@ function enterGame(code) {
 
   if (isHost) {
     show('hostControls');
+    show('qrBtnRow');
+    initQR(code);
   } else {
     show('playerAnswerArea');
   }
@@ -404,19 +893,68 @@ function enterGame(code) {
 }
 
 /* ── Listen ── */
+let prevRound = 1;
+
 function listenToLobby(code) {
   db.ref('lobbies/' + code).on('value', snap => {
     const lobby = snap.val();
     if (!lobby) return;
 
     currentRound = lobby.round || 1;
-    roundLocked = lobby.roundLocked !== false; // default locked
+    roundLocked = lobby.roundLocked !== false;
+    const gameOver = lobby.gameOver === true;
 
     $('roundBadge').textContent = 'Round ' + currentRound;
+
+    if (gameOver) {
+      clearSavedSession();
+      renderResults(lobby);
+      return;
+    }
+
+    // If round changed and player, clear their inputs
+    if (!isHost && currentRound !== prevRound) {
+      clearPlayerInputs();
+      prevRound = currentRound;
+    }
+
+    // If host, restore song fields for current round
+    if (isHost) {
+      const roundKey = 'round' + currentRound;
+      const song = lobby.songs?.[roundKey] || {};
+      $('hostCorrectArtist').value = song.artist || '';
+      $('hostCorrectTitle').value = song.title || '';
+    }
 
     renderPlayers(lobby);
     updatePlayerUI(lobby);
   });
+}
+
+/* ── Host: Save Song Answer to Firebase ── */
+function saveSongAnswer() {
+  if (!isHost || !lobbyCode) return;
+  clearTimeout(songSaveTimer);
+  $('songSavedNotice').textContent = '';
+  songSaveTimer = setTimeout(() => {
+    const artist = $('hostCorrectArtist').value.trim();
+    const title = $('hostCorrectTitle').value.trim();
+    const roundKey = 'round' + currentRound;
+    db.ref(`lobbies/${lobbyCode}/songs/${roundKey}`).set({ artist, title }).then(() => {
+      $('songSavedNotice').textContent = '✓ Saved';
+      setTimeout(() => { $('songSavedNotice').textContent = ''; }, 2000);
+    });
+  }, 600);
+}
+
+/* ── Clear player answer inputs ── */
+function clearPlayerInputs() {
+  $('answerArtist').value = '';
+  $('answerTitle').value = '';
+  $('answerArtist').disabled = false;
+  $('answerTitle').disabled = false;
+  $('btnSubmit').disabled = false;
+  setStatus('answerStatus', '');
 }
 
 /* ── Render Player List ── */
@@ -438,7 +976,6 @@ function renderPlayers(lobby) {
     const artistGiven = ans.artistPoint === true;
     const titleGiven = ans.titlePoint === true;
 
-    // Host sees answers + award buttons; players see only score
     let answerBlock = '';
     if (isHost) {
       const artistVal = ans.artist ? ans.artist : '—';
@@ -476,7 +1013,7 @@ function renderPlayers(lobby) {
   });
 }
 
-/* ── Update Player UI (answer inputs) ── */
+/* ── Update Player UI ── */
 function updatePlayerUI(lobby) {
   if (isHost) return;
 
@@ -504,7 +1041,6 @@ function updatePlayerUI(lobby) {
       $('answerArtist').disabled = false;
       $('answerTitle').disabled = false;
       $('btnSubmit').disabled = false;
-      // Don't wipe a success message unnecessarily
       if (!$('answerStatus').classList.contains('ok')) {
         setStatus('answerStatus', 'Enter your guesses above.');
       }
@@ -519,13 +1055,8 @@ function submitAnswer() {
   const artist = $('answerArtist').value.trim();
   const title  = $('answerTitle').value.trim();
 
-  if (!artist && !title) {
-    return setStatus('answerStatus', 'Enter at least one answer.', 'err');
-  }
-
-  if (roundLocked) {
-    return setStatus('answerStatus', 'Round not started yet.', 'err');
-  }
+  if (!artist && !title) return setStatus('answerStatus', 'Enter at least one answer.', 'err');
+  if (roundLocked) return setStatus('answerStatus', 'Round not started yet.', 'err');
 
   const roundKey = 'round' + currentRound;
   db.ref(`lobbies/${lobbyCode}/players/${myPlayerId}/answers/${roundKey}`).update({
@@ -545,18 +1076,13 @@ function awardPoint(pid, type) {
   if (!isHost || !lobbyCode) return;
 
   const roundKey = 'round' + currentRound;
-  const pointField = type + 'Point'; // 'artistPoint' or 'titlePoint'
+  const pointField = type + 'Point';
   const pointPath = `lobbies/${lobbyCode}/players/${pid}/answers/${roundKey}/${pointField}`;
 
   db.ref(pointPath).once('value').then(snap => {
-    if (snap.val() === true) return; // already awarded
-
-    // Mark point
+    if (snap.val() === true) return;
     db.ref(pointPath).set(true);
-
-    // Increment score atomically
-    db.ref(`lobbies/${lobbyCode}/players/${pid}/score`)
-      .transaction(s => (s || 0) + 1);
+    db.ref(`lobbies/${lobbyCode}/players/${pid}/score`).transaction(s => (s || 0) + 1);
   });
 }
 
@@ -566,9 +1092,32 @@ function unlockRound() {
   db.ref('lobbies/' + lobbyCode).update({ roundLocked: false });
 }
 
-/* ── Host: Next Round ── */
-function lockNextRound() {
-  if (!isHost || !lobbyCode) return;
+/* ── Host: Show Transition Screen ── */
+function showTransitionScreen() {
+  if (!isHost) return;
+
+  // Pull the saved song answer for this round
+  const roundKey = 'round' + currentRound;
+  db.ref(`lobbies/${lobbyCode}/songs/${roundKey}`).once('value').then(snap => {
+    const song = snap.val() || {};
+    const artist = song.artist || '(no artist entered)';
+    const title = song.title || '(no title entered)';
+
+    $('tsCorrectArtist').innerHTML = `🎤 <strong>${escHtml(artist)}</strong>`;
+    $('tsCorrectTitle').innerHTML = `🎵 <strong>${escHtml(title)}</strong>`;
+    $('tsRoundLabel').textContent = 'Round ' + currentRound;
+    $('tsNextRoundNum').textContent = currentRound + 1;
+    show('transitionScreen');
+  });
+}
+
+/* ── Host: Proceed to Next Round ── */
+function proceedToNextRound() {
+  hide('transitionScreen');
+  // Clear host song fields
+  $('hostCorrectArtist').value = '';
+  $('hostCorrectTitle').value = '';
+
   db.ref('lobbies/' + lobbyCode).transaction(data => {
     if (data) {
       data.round = (data.round || 1) + 1;
@@ -576,9 +1125,300 @@ function lockNextRound() {
     }
     return data;
   });
-  // Clear answer inputs for next round
-  $('answerArtist').value = '';
-  $('answerTitle').value = '';
+}
+
+/* ── Host: End Game ── */
+function endGame() {
+  if (!isHost || !lobbyCode) return;
+  db.ref('lobbies/' + lobbyCode).update({ gameOver: true, roundLocked: true });
+}
+
+/* ── Render Results ── */
+let resultsShown = false;
+function renderResults(lobby) {
+  hide('sectionGame');
+
+  const podiumList = $('podiumList');
+  podiumList.innerHTML = '';
+
+  const players = lobby.players ? Object.values(lobby.players) : [];
+  players.sort((a, b) => (b.score || 0) - (a.score || 0));
+
+  players.forEach((player, idx) => {
+    const rank = idx + 1;
+    const entry = document.createElement('div');
+    entry.className = `podium-entry rank-${rank <= 3 ? rank : 'other'}`;
+    entry.style.animationDelay = `${idx * 0.12}s`;
+
+    const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+    entry.innerHTML = `
+      <div class="podium-rank">${medal}</div>
+      <div class="podium-info">
+        <div class="podium-name">${escHtml(player.name)}</div>
+        <div class="podium-score">${lobby.round || 1} rounds played</div>
+      </div>
+      <div class="podium-score-badge">${player.score || 0} pts</div>
+    `;
+    podiumList.appendChild(entry);
+  });
+
+  show('resultsScreen');
+  if (!resultsShown) { spawnConfetti(); resultsShown = true; }
+}
+
+/* ── Close Results ── */
+function closeResults() {
+  hide('resultsScreen');
+  show('sectionGame');
+}
+
+/* ── Confetti ── */
+function spawnConfetti() {
+  const colors = ['#ff4fa3','#ff85c2','#ffd700','#c0185e','#fff','#ff7eb3'];
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const dot = document.createElement('div');
+      dot.className = 'confetti-dot';
+      dot.style.left = Math.random() * 100 + 'vw';
+      dot.style.background = colors[Math.floor(Math.random() * colors.length)];
+      dot.style.animationDuration = (2 + Math.random() * 2.5) + 's';
+      dot.style.animationDelay = (Math.random() * 0.5) + 's';
+      dot.style.width = (6 + Math.random() * 8) + 'px';
+      dot.style.height = dot.style.width;
+      dot.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      document.body.appendChild(dot);
+      setTimeout(() => dot.remove(), 5000);
+    }, i * 40);
+  }
+}
+
+/* ── QR Code ── */
+let qrGenerated = false;
+let qrVisible = false;
+
+function initQR(code) {
+  // Build the join URL — same page with ?join=CODE pre-filled
+  const url = window.location.href.split('?')[0] + '?join=' + code;
+  $('qrUrl').textContent = url;
+
+  if (!qrGenerated) {
+    new QRCode($('qrContainer'), {
+      text: url,
+      width: 180,
+      height: 180,
+      colorDark: '#1a0a12',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    qrGenerated = true;
+  }
+}
+
+function toggleQR() {
+  qrVisible = !qrVisible;
+  if (qrVisible) {
+    show('qrPanel');
+    $('btnToggleQR').textContent = '🙈 Hide QR Code';
+  } else {
+    hide('qrPanel');
+    $('btnToggleQR').textContent = '📱 Show QR Code';
+  }
+}
+
+async function exportPDF() {
+  const btn = document.querySelector('.res-actions .btn-primary');
+  btn.textContent = '⏳ Generating…';
+  btn.disabled = true;
+
+  try {
+    // Fetch full lobby data fresh
+    const snap = await db.ref('lobbies/' + lobbyCode).once('value');
+    const lobby = snap.val();
+    if (!lobby) throw new Error('No lobby data');
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageW = 210;
+    const pageH = 297;
+    const margin = 18;
+    const contentW = pageW - margin * 2;
+    let y = margin;
+
+    const pink = [192, 24, 94];
+    const darkBg = [26, 10, 18];
+    const lightPink = [255, 230, 243];
+    const mutedText = [120, 60, 90];
+
+    function checkPageBreak(needed = 10) {
+      if (y + needed > pageH - margin) {
+        doc.addPage();
+        y = margin;
+        drawPageHeader();
+      }
+    }
+
+    function drawPageHeader() {
+      doc.setFillColor(...darkBg);
+      doc.rect(0, 0, pageW, 14, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(255, 133, 194);
+      doc.text('🎵 Song Quiz — Answer Sheet', margin, 9);
+      doc.setTextColor(...mutedText);
+      doc.text(`Lobby: ${lobbyCode}`, pageW - margin, 9, { align: 'right' });
+      y = Math.max(y, 18);
+    }
+
+    // ── Cover header ──
+    doc.setFillColor(...darkBg);
+    doc.rect(0, 0, pageW, 40, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(22);
+    doc.setTextColor(...pink);
+    doc.text('Song Quiz', margin, 18);
+    doc.setFontSize(11);
+    doc.setTextColor(255, 133, 194);
+    doc.text('Answer Sheet', margin, 27);
+    doc.setFontSize(9);
+    doc.setTextColor(...mutedText);
+    doc.text(`Lobby: ${lobbyCode}  ·  ${new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })}`, margin, 35);
+    y = 50;
+
+    const totalRounds = lobby.round || 1;
+    const players = lobby.players ? Object.entries(lobby.players) : [];
+    const songs = lobby.songs || {};
+
+    for (let r = 1; r <= totalRounds; r++) {
+      const roundKey = 'round' + r;
+      const song = songs[roundKey] || {};
+      const correctArtist = song.artist || '—';
+      const correctTitle = song.title || '—';
+
+      checkPageBreak(30);
+
+      // Round header bar
+      doc.setFillColor(...pink);
+      doc.roundedRect(margin, y, contentW, 10, 2, 2, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(255, 255, 255);
+      doc.text(`Round ${r}`, margin + 4, y + 7);
+      y += 13;
+
+      // Correct answer box
+      doc.setFillColor(...lightPink);
+      doc.roundedRect(margin, y, contentW, 16, 2, 2, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(...pink);
+      doc.text('CORRECT ANSWER', margin + 4, y + 5);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(...darkBg);
+      doc.text(`🎤 ${correctArtist}   🎵 ${correctTitle}`, margin + 4, y + 12);
+      y += 20;
+
+      // Player answers table header
+      if (players.length > 0) {
+        const colW = [48, contentW - 48 - 28 - 28, 28, 28];
+        const cols = ['Player', 'Artist / Title', 'Artist', 'Title'];
+        const xPositions = [margin, margin + colW[0], margin + colW[0] + colW[1], margin + colW[0] + colW[1] + colW[2]];
+
+        checkPageBreak(8);
+        doc.setFillColor(46, 20, 32);
+        doc.rect(margin, y, contentW, 7, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7.5);
+        doc.setTextColor(255, 133, 194);
+        cols.forEach((col, i) => doc.text(col, xPositions[i] + 2, y + 5));
+        y += 8;
+
+        players.forEach(([pid, player], idx) => {
+          const ans = player.answers?.[roundKey] || {};
+          const artistPt = ans.artistPoint === true;
+          const titlePt = ans.titlePoint === true;
+          const rowH = 8;
+
+          checkPageBreak(rowH + 2);
+
+          // Alternating row bg
+          if (idx % 2 === 0) {
+            doc.setFillColor(36, 16, 24);
+            doc.rect(margin, y, contentW, rowH, 'F');
+          }
+
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(8);
+          doc.setTextColor(255, 230, 243);
+          doc.text(player.name || 'Unknown', xPositions[0] + 2, y + 5.5);
+
+          // Artist answer
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(200, 180, 190);
+          const artistStr = ans.artist || '—';
+          const titleStr = ans.title || '—';
+          const combinedStr = `${artistStr} / ${titleStr}`;
+          const truncated = doc.splitTextToSize(combinedStr, colW[1] - 4)[0];
+          doc.text(truncated, xPositions[1] + 2, y + 5.5);
+
+          // Point indicators
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(9);
+          if (artistPt) {
+            doc.setTextColor(80, 200, 120);
+            doc.text('✓', xPositions[2] + 10, y + 5.5, { align: 'center' });
+          } else {
+            doc.setTextColor(180, 80, 80);
+            doc.text('✗', xPositions[2] + 10, y + 5.5, { align: 'center' });
+          }
+          if (titlePt) {
+            doc.setTextColor(80, 200, 120);
+            doc.text('✓', xPositions[3] + 10, y + 5.5, { align: 'center' });
+          } else {
+            doc.setTextColor(180, 80, 80);
+            doc.text('✗', xPositions[3] + 10, y + 5.5, { align: 'center' });
+          }
+
+          y += rowH;
+        });
+      }
+
+      y += 10;
+    }
+
+    // ── Final scores page ──
+    checkPageBreak(40);
+    doc.setFillColor(...darkBg);
+    doc.rect(0, y - 2, pageW, 14, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(...pink);
+    doc.text('Final Scores', margin, y + 8);
+    y += 18;
+
+    const sorted = [...players].sort((a, b) => (b[1].score || 0) - (a[1].score || 0));
+    sorted.forEach(([pid, player], idx) => {
+      checkPageBreak(10);
+      const medals = ['🥇', '🥈', '🥉'];
+      const medal = medals[idx] || `#${idx + 1}`;
+      doc.setFont('helvetica', idx === 0 ? 'bold' : 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(255, 230, 243);
+      doc.text(`${medal}  ${player.name}`, margin + 4, y);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...pink);
+      doc.text(`${player.score || 0} pts`, pageW - margin, y, { align: 'right' });
+      y += 9;
+    });
+
+    doc.save(`song-quiz-${lobbyCode}-answers.pdf`);
+  } catch (err) {
+    console.error(err);
+    alert('PDF export failed: ' + err.message);
+  }
+
+  btn.textContent = '📄 Export Answer Sheet (PDF)';
+  btn.disabled = false;
 }
 
 /* ── XSS protection ── */
