@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Song Quiz Hub</title>
+  <title>Alie's Song Quiz</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -619,7 +619,7 @@
 <body>
 <div class="app">
   <header>
-    <h1>🎵 Song Quiz</h1>
+    <h1>🎵 Alie's Song Quiz</h1>
     <p>Host a round. Guess the track.</p>
   </header>
 
@@ -712,8 +712,9 @@
     <div class="ts-answer-placeholder" id="tsCorrectArtist" style="font-size:1rem;color:var(--muted);font-style:normal">🎤 <span style="font-style:italic">Artist</span></div>
     <div class="ts-answer-placeholder" id="tsCorrectTitle" style="margin-top:6px">🎵 <span style="font-style:italic">Song Title</span></div>
   </div>
-  <p class="ts-hint">Reveal the answer to your players, then continue.</p>
-  <button class="ts-btn" onclick="proceedToNextRound()">Continue to Round <span id="tsNextRoundNum">2</span> →</button>
+  <p class="ts-hint" id="tsHintHost">Reveal the answer to your players, then continue.</p>
+  <button class="ts-btn" id="tsBtnHost" onclick="proceedToNextRound()">Continue to Round <span id="tsNextRoundNum">2</span> →</button>
+  <button class="ts-btn" id="tsBtnPlayer" onclick="playerDismissTransition()" style="background:rgba(255,255,255,0.1);box-shadow:none;">Got it! ✓</button>
 </div>
 
 <!-- RESULTS SCREEN -->
@@ -912,6 +913,17 @@ function listenToLobby(code) {
       return;
     }
 
+    // Handle transition screen for everyone
+    const transition = lobby.transition || {};
+    if (transition.active && transition.round === currentRound) {
+      if (!isHost) {
+        showTransitionOverlay(transition.round, transition.artist || '—', transition.title || '—');
+      }
+    } else if (!transition.active) {
+      // Auto-hide transition screen when host clears it (round advanced)
+      hide('transitionScreen');
+    }
+
     // If round changed and player, clear their inputs
     if (!isHost && currentRound !== prevRound) {
       clearPlayerInputs();
@@ -1096,35 +1108,65 @@ function unlockRound() {
 function showTransitionScreen() {
   if (!isHost) return;
 
-  // Pull the saved song answer for this round
   const roundKey = 'round' + currentRound;
   db.ref(`lobbies/${lobbyCode}/songs/${roundKey}`).once('value').then(snap => {
     const song = snap.val() || {};
     const artist = song.artist || '(no artist entered)';
     const title = song.title || '(no title entered)';
 
-    $('tsCorrectArtist').innerHTML = `🎤 <strong>${escHtml(artist)}</strong>`;
-    $('tsCorrectTitle').innerHTML = `🎵 <strong>${escHtml(title)}</strong>`;
-    $('tsRoundLabel').textContent = 'Round ' + currentRound;
-    $('tsNextRoundNum').textContent = currentRound + 1;
-    show('transitionScreen');
+    // Write transition state to Firebase so players see it too
+    db.ref('lobbies/' + lobbyCode).update({
+      transition: {
+        active: true,
+        round: currentRound,
+        artist: artist,
+        title: title
+      }
+    });
+
+    showTransitionOverlay(currentRound, artist, title);
   });
+}
+
+/* ── Show transition overlay (shared by host + players) ── */
+function showTransitionOverlay(round, artist, title) {
+  $('tsCorrectArtist').innerHTML = `🎤 <strong>${escHtml(artist)}</strong>`;
+  $('tsCorrectTitle').innerHTML = `🎵 <strong>${escHtml(title)}</strong>`;
+  $('tsRoundLabel').textContent = 'Round ' + round;
+  $('tsNextRoundNum').textContent = round + 1;
+
+  // Show different button for host vs player
+  if (isHost) {
+    $('tsBtnHost').classList.remove('hidden');
+    $('tsBtnPlayer').classList.add('hidden');
+  } else {
+    $('tsBtnHost').classList.add('hidden');
+    $('tsBtnPlayer').classList.remove('hidden');
+  }
+
+  show('transitionScreen');
 }
 
 /* ── Host: Proceed to Next Round ── */
 function proceedToNextRound() {
   hide('transitionScreen');
-  // Clear host song fields
   $('hostCorrectArtist').value = '';
   $('hostCorrectTitle').value = '';
 
+  // Clear transition state and advance round
   db.ref('lobbies/' + lobbyCode).transaction(data => {
     if (data) {
       data.round = (data.round || 1) + 1;
       data.roundLocked = true;
+      data.transition = { active: false };
     }
     return data;
   });
+}
+
+/* ── Player: dismiss their own transition screen ── */
+function playerDismissTransition() {
+  hide('transitionScreen');
 }
 
 /* ── Host: End Game ── */
