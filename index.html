@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Song Quiz Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0d14;
+      --surface: #16161f;
+      --surface2: #1e1e2e;
+      --accent: #f5c542;
+      --accent2: #e07b39;
+      --text: #f0eeff;
+      --muted: #7a7a9a;
+      --success: #50c878;
+      --danger: #e05555;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px 16px 60px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .card h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--surface2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    input::placeholder { color: var(--muted); }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 11px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      margin-bottom: 8px;
+    }
+
+    .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #111; }
+    .btn-ghost { background: var(--surface2); color: var(--text); border: 1px solid rgba(255,255,255,0.1); }
+    .btn-success { background: var(--success); color: #111; }
+    .btn-small {
+      display: inline-block;
+      width: auto;
+      padding: 5px 12px;
+      font-size: 0.8rem;
+      margin: 3px 3px 0 0;
+      margin-bottom: 0;
+    }
+
+    .status-msg {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 6px;
+      min-height: 20px;
+    }
+
+    .status-msg.ok { color: var(--success); }
+    .status-msg.err { color: var(--danger); }
+
+    .lobby-code-display {
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .lobby-code-display .code {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.6rem;
+      letter-spacing: 8px;
+      color: var(--accent);
+    }
+
+    .lobby-code-display .label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .round-badge {
+      display: inline-block;
+      background: var(--accent2);
+      color: #fff;
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .locked-notice {
+      background: rgba(224,85,85,0.15);
+      border: 1px solid rgba(224,85,85,0.3);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #e08888;
+      margin-bottom: 10px;
+    }
+
+    .player-entry {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .player-name {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .player-score {
+      background: var(--accent);
+      color: #111;
+      font-weight: 700;
+      font-size: 0.8rem;
+      border-radius: 20px;
+      padding: 2px 10px;
+    }
+
+    .answer-reveal {
+      background: rgba(255,255,255,0.04);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+
+    .answer-reveal .label {
+      color: var(--muted);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .answer-reveal .val {
+      color: var(--text);
+      margin-top: 2px;
+    }
+
+    .answer-reveal .val.empty { color: var(--muted); font-style: italic; }
+
+    .host-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      margin: 18px 0;
+    }
+
+    .hidden { display: none !important; }
+
+    /* Sections */
+    #sectionLanding {}
+    #sectionGame {}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>🎵 Song Quiz</h1>
+    <p>Host a round. Guess the track.</p>
+  </header>
+
+  <!-- LANDING -->
+  <div id="sectionLanding">
+    <div class="card">
+      <h2>Create Lobby</h2>
+      <button class="btn btn-primary" onclick="createLobby()">+ New Lobby</button>
+      <p class="status-msg" id="createStatus"></p>
+    </div>
+
+    <div class="card">
+      <h2>Join Game</h2>
+      <input id="playerName" placeholder="Your display name" maxlength="24">
+      <input id="joinCode" placeholder="Lobby code (e.g. AB12CD)" maxlength="6" style="text-transform:uppercase">
+      <button class="btn btn-primary" onclick="joinLobby()">Join →</button>
+      <p class="status-msg" id="joinStatus"></p>
+    </div>
+  </div>
+
+  <!-- IN GAME -->
+  <div id="sectionGame" class="hidden">
+
+    <!-- Lobby info -->
+    <div class="card" id="lobbyInfoCard">
+      <div class="lobby-code-display">
+        <div class="label">Lobby Code</div>
+        <div class="code" id="displayCode">——</div>
+      </div>
+      <div class="round-badge" id="roundBadge">Round 1</div>
+
+      <!-- HOST controls -->
+      <div id="hostControls" class="hidden">
+        <button class="btn btn-success" onclick="unlockRound()" id="btnUnlock">▶ Start Round</button>
+        <button class="btn btn-ghost" onclick="lockNextRound()" id="btnNext">⏭ Next Round</button>
+      </div>
+
+      <!-- PLAYER answer area -->
+      <div id="playerAnswerArea" class="hidden">
+        <div id="roundLockedNotice" class="locked-notice hidden">⏳ Waiting for host to start round…</div>
+        <input id="answerArtist" placeholder="🎤 Artist name…">
+        <input id="answerTitle" placeholder="🎵 Song title…">
+        <button class="btn btn-primary" onclick="submitAnswer()" id="btnSubmit">Submit Answer</button>
+        <p class="status-msg" id="answerStatus"></p>
+      </div>
+    </div>
+
+    <!-- Player list -->
+    <div class="card">
+      <h2>Players</h2>
+      <div id="playerList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+/* ── Firebase ── */
+firebase.initializeApp({
+  apiKey: "AIzaSyDtEl046HxySRHfczOpvca0ybifAWN4FSw",
+  authDomain: "song-quix.firebaseapp.com",
+  databaseURL: "https://song-quix-default-rtdb.firebaseio.com",
+  projectId: "song-quix",
+  storageBucket: "song-quix.firebasestorage.app",
+  messagingSenderId: "755583525637",
+  appId: "1:755583525637:web:d93d6be19afcfba08bcd6c"
+});
+const db = firebase.database();
+
+/* ── State ── */
+let lobbyCode = null;
+let myPlayerId = null;
+let isHost = false;
+let currentRound = 1;
+let roundLocked = true;
+let submittedThisRound = false;
+
+/* ── Util ── */
+const $ = id => document.getElementById(id);
+
+function genCode() {
+  return Math.random().toString(36).substring(2, 8).toUpperCase();
+}
+
+function show(id) { $(id).classList.remove('hidden'); }
+function hide(id) { $(id).classList.add('hidden'); }
+
+function setStatus(id, msg, type = '') {
+  const el = $(id);
+  el.textContent = msg;
+  el.className = 'status-msg' + (type ? ' ' + type : '');
+}
+
+/* ── Create Lobby ── */
+function createLobby() {
+  const code = genCode();
+  lobbyCode = code;
+  isHost = true;
+
+  db.ref('lobbies/' + code).set({
+    status: 'open',
+    round: 1,
+    roundLocked: true
+  }).then(() => {
+    enterGame(code);
+    setStatus('createStatus', 'Lobby created!', 'ok');
+  }).catch(e => {
+    setStatus('createStatus', 'Error: ' + e.message, 'err');
+  });
+}
+
+/* ── Join Lobby ── */
+function joinLobby() {
+  const name = $('playerName').value.trim();
+  const code = $('joinCode').value.trim().toUpperCase();
+
+  if (!name) return setStatus('joinStatus', 'Enter your name.', 'err');
+  if (!code || code.length < 4) return setStatus('joinStatus', 'Enter a valid lobby code.', 'err');
+
+  db.ref('lobbies/' + code).once('value').then(snap => {
+    if (!snap.exists()) {
+      return setStatus('joinStatus', 'Lobby not found.', 'err');
+    }
+    const pid = db.ref().push().key;
+    myPlayerId = pid;
+    return db.ref(`lobbies/${code}/players/${pid}`).set({
+      name: name,
+      score: 0,
+      answers: {}
+    }).then(() => {
+      lobbyCode = code;
+      isHost = false;
+      enterGame(code);
+      setStatus('joinStatus', 'Joined!', 'ok');
+    });
+  }).catch(e => setStatus('joinStatus', 'Error: ' + e.message, 'err'));
+}
+
+/* ── Enter Game View ── */
+function enterGame(code) {
+  hide('sectionLanding');
+  show('sectionGame');
+  $('displayCode').textContent = code;
+
+  if (isHost) {
+    show('hostControls');
+  } else {
+    show('playerAnswerArea');
+  }
+
+  listenToLobby(code);
+}
+
+/* ── Listen ── */
+function listenToLobby(code) {
+  db.ref('lobbies/' + code).on('value', snap => {
+    const lobby = snap.val();
+    if (!lobby) return;
+
+    currentRound = lobby.round || 1;
+    roundLocked = lobby.roundLocked !== false; // default locked
+
+    $('roundBadge').textContent = 'Round ' + currentRound;
+
+    renderPlayers(lobby);
+    updatePlayerUI(lobby);
+  });
+}
+
+/* ── Render Player List ── */
+function renderPlayers(lobby) {
+  const list = $('playerList');
+  if (!lobby.players) {
+    list.innerHTML = '<p style="color:var(--muted);font-size:0.85rem">No players yet.</p>';
+    return;
+  }
+
+  list.innerHTML = '';
+
+  Object.entries(lobby.players).forEach(([pid, player]) => {
+    const div = document.createElement('div');
+    div.className = 'player-entry';
+
+    const roundKey = 'round' + currentRound;
+    const ans = player.answers?.[roundKey] || {};
+    const artistGiven = ans.artistPoint === true;
+    const titleGiven = ans.titlePoint === true;
+
+    // Host sees answers + award buttons; players see only score
+    let answerBlock = '';
+    if (isHost) {
+      const artistVal = ans.artist ? ans.artist : '—';
+      const titleVal  = ans.title  ? ans.title  : '—';
+      answerBlock = `
+        <div class="answer-reveal">
+          <div class="label">Artist</div>
+          <div class="val ${ans.artist ? '' : 'empty'}">${escHtml(artistVal)}</div>
+        </div>
+        <div class="answer-reveal">
+          <div class="label">Song Title</div>
+          <div class="val ${ans.title ? '' : 'empty'}">${escHtml(titleVal)}</div>
+        </div>
+        <div class="host-row">
+          <button class="btn btn-small btn-success" onclick="awardPoint('${pid}','artist')"
+            ${artistGiven || roundLocked ? 'disabled' : ''}>
+            ${artistGiven ? '✓ Artist' : '🎤 +1 Artist'}
+          </button>
+          <button class="btn btn-small btn-success" onclick="awardPoint('${pid}','title')"
+            ${titleGiven || roundLocked ? 'disabled' : ''}>
+            ${titleGiven ? '✓ Title' : '🎵 +1 Title'}
+          </button>
+        </div>
+      `;
+    }
+
+    div.innerHTML = `
+      <div class="player-header">
+        <span class="player-name">${escHtml(player.name)}</span>
+        <span class="player-score">${player.score || 0} pts</span>
+      </div>
+      ${answerBlock}
+    `;
+    list.appendChild(div);
+  });
+}
+
+/* ── Update Player UI (answer inputs) ── */
+function updatePlayerUI(lobby) {
+  if (isHost) return;
+
+  const roundKey = 'round' + currentRound;
+  const myData = lobby.players?.[myPlayerId];
+  const myAns = myData?.answers?.[roundKey];
+  const alreadySubmitted = myAns?.submitted === true;
+
+  if (roundLocked) {
+    show('roundLockedNotice');
+    $('answerArtist').disabled = true;
+    $('answerTitle').disabled = true;
+    $('btnSubmit').disabled = true;
+    if (alreadySubmitted) {
+      setStatus('answerStatus', '✓ Answer submitted. Waiting for next round.', 'ok');
+    }
+  } else {
+    hide('roundLockedNotice');
+    if (alreadySubmitted) {
+      $('answerArtist').disabled = true;
+      $('answerTitle').disabled = true;
+      $('btnSubmit').disabled = true;
+      setStatus('answerStatus', '✓ Answer submitted!', 'ok');
+    } else {
+      $('answerArtist').disabled = false;
+      $('answerTitle').disabled = false;
+      $('btnSubmit').disabled = false;
+      // Don't wipe a success message unnecessarily
+      if (!$('answerStatus').classList.contains('ok')) {
+        setStatus('answerStatus', 'Enter your guesses above.');
+      }
+    }
+  }
+}
+
+/* ── Submit Answer ── */
+function submitAnswer() {
+  if (!myPlayerId || !lobbyCode) return;
+
+  const artist = $('answerArtist').value.trim();
+  const title  = $('answerTitle').value.trim();
+
+  if (!artist && !title) {
+    return setStatus('answerStatus', 'Enter at least one answer.', 'err');
+  }
+
+  if (roundLocked) {
+    return setStatus('answerStatus', 'Round not started yet.', 'err');
+  }
+
+  const roundKey = 'round' + currentRound;
+  db.ref(`lobbies/${lobbyCode}/players/${myPlayerId}/answers/${roundKey}`).update({
+    artist: artist || '',
+    title: title || '',
+    submitted: true
+  }).then(() => {
+    setStatus('answerStatus', '✓ Submitted!', 'ok');
+    $('answerArtist').disabled = true;
+    $('answerTitle').disabled = true;
+    $('btnSubmit').disabled = true;
+  }).catch(e => setStatus('answerStatus', 'Error: ' + e.message, 'err'));
+}
+
+/* ── Host: Award Point ── */
+function awardPoint(pid, type) {
+  if (!isHost || !lobbyCode) return;
+
+  const roundKey = 'round' + currentRound;
+  const pointField = type + 'Point'; // 'artistPoint' or 'titlePoint'
+  const pointPath = `lobbies/${lobbyCode}/players/${pid}/answers/${roundKey}/${pointField}`;
+
+  db.ref(pointPath).once('value').then(snap => {
+    if (snap.val() === true) return; // already awarded
+
+    // Mark point
+    db.ref(pointPath).set(true);
+
+    // Increment score atomically
+    db.ref(`lobbies/${lobbyCode}/players/${pid}/score`)
+      .transaction(s => (s || 0) + 1);
+  });
+}
+
+/* ── Host: Unlock Round ── */
+function unlockRound() {
+  if (!isHost || !lobbyCode) return;
+  db.ref('lobbies/' + lobbyCode).update({ roundLocked: false });
+}
+
+/* ── Host: Next Round ── */
+function lockNextRound() {
+  if (!isHost || !lobbyCode) return;
+  db.ref('lobbies/' + lobbyCode).transaction(data => {
+    if (data) {
+      data.round = (data.round || 1) + 1;
+      data.roundLocked = true;
+    }
+    return data;
+  });
+  // Clear answer inputs for next round
+  $('answerArtist').value = '';
+  $('answerTitle').value = '';
+}
+
+/* ── XSS protection ── */
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
